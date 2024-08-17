@@ -8,6 +8,7 @@ import uuid
 from typing import Union, Callable, Optional
 from functools import wraps
 
+
 def count_calls(method: Callable) -> Callable:
     """
     Decorator that counts the number of times a method is called.
@@ -24,14 +25,15 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
-    Decorator that stores the history of inputs and outputs for a particular function.
+    Decorator that stores the history of inputs and outputs.
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
-        Wrapper function that stores the history of function inputs and outputs.
+        Wrapper function that stores the history of function inputs.
         """
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
@@ -46,6 +48,7 @@ def call_history(method: Callable) -> Callable:
         return output
 
     return wrapper
+
 
 def replay(method: Callable):
     """
@@ -66,6 +69,7 @@ def replay(method: Callable):
         output_str = output_str.decode("utf-8")
         print(f"{method.__qualname__}(*{input_str}) -> {output_str}")
 
+
 class Cache:
     """
     Cache class to store data in Redis.
@@ -73,7 +77,7 @@ class Cache:
 
     def __init__(self):
         """
-        Initializes the Cache class with a Redis client and flushes the database.
+        Initializes the Cache class with a Redis client.
         """
         self._redis = redis.Redis()
         self._redis.flushdb()
@@ -87,9 +91,10 @@ class Cache:
         self._redis.set(key, data)
         return key
     
+
     def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, None]:
         """
-        Retrieves data from Redis and applies a conversion function if provided.
+        Retrieves data from Redis and applies a conversion.
         """
         data = self._redis.get(key)
         if data is None:
